@@ -92,7 +92,7 @@ public final class Solver {
 
     private static HeuristicType normalizeHeuristic(HeuristicType heuristicType) {
         if (heuristicType == null || heuristicType == HeuristicType.NONE) {
-            return HeuristicType.NEXT_TARGET;
+            return HeuristicType.MANHATTAN_NEXT_TARGET;
         }
         return heuristicType;
     }

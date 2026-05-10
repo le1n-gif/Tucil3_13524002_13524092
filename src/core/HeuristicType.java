@@ -2,6 +2,8 @@ package core;
 
 public enum HeuristicType {
     NONE,
-    NEXT_TARGET,
-    ORDERED_CHAIN
+    MANHATTAN_NEXT_TARGET,
+    MANHATTAN_ORDERED_CHAIN,
+    CHEBYSHEV_NEXT_TARGET,
+    EUCLIDEAN_NEXT_TARGET
 }
