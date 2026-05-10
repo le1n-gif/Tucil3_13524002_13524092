@@ -56,7 +56,7 @@ public final class Solver {
             exploredStates.add(current.state);
 
             if (board.isGoalState(current.state)) {
-                return buildFoundResult(current, iterations, elapsedMillis(startTime), exploredStates);
+                return buildFoundResult(current, iterations, elapsedNanos(startTime), exploredStates);
             }
 
             List<MoveResult> neighbors = Movement.generateNeighbors(board, current.state);
@@ -87,7 +87,7 @@ public final class Solver {
             }
         }
 
-        return SearchResult.notFound(iterations, elapsedMillis(startTime), exploredStates);
+        return SearchResult.notFoundWithNanos(iterations, elapsedNanos(startTime), exploredStates);
     }
 
     private static HeuristicType normalizeHeuristic(HeuristicType heuristicType) {
@@ -134,7 +134,7 @@ public final class Solver {
     private static SearchResult buildFoundResult(
             Node goalNode,
             int iterations,
-            long executionTimeMillis,
+            long executionTimeNanos,
             List<State> exploredStates) {
         LinkedList<State> states = new LinkedList<State>();
         LinkedList<Direction> moves = new LinkedList<Direction>();
@@ -153,18 +153,18 @@ public final class Solver {
             moveString.append(move.getSymbol());
         }
 
-        return SearchResult.found(
+        return SearchResult.foundWithNanos(
                 moveString.toString(),
                 goalNode.costFromStart,
                 iterations,
-                executionTimeMillis,
+                executionTimeNanos,
                 states,
                 moves,
                 Collections.unmodifiableList(new ArrayList<State>(exploredStates)));
     }
 
-    private static long elapsedMillis(long startTimeNanos) {
-        return (System.nanoTime() - startTimeNanos) / 1_000_000L;
+    private static long elapsedNanos(long startTimeNanos) {
+        return System.nanoTime() - startTimeNanos;
     }
 
     private static final class Node {

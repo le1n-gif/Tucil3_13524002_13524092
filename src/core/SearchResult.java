@@ -9,7 +9,7 @@ public final class SearchResult {
     private final String moveString;
     private final int totalCost;
     private final int iterations;
-    private final long executionTimeMillis;
+    private final long executionTimeNanos;
     private final List<State> solutionStates;
     private final List<Direction> solutionMoves;
     private final List<State> exploredStates;
@@ -19,7 +19,7 @@ public final class SearchResult {
             String moveString,
             int totalCost,
             int iterations,
-            long executionTimeMillis,
+            long executionTimeNanos,
             List<State> solutionStates,
             List<Direction> solutionMoves,
             List<State> exploredStates
@@ -28,7 +28,7 @@ public final class SearchResult {
         this.moveString = moveString;
         this.totalCost = totalCost;
         this.iterations = iterations;
-        this.executionTimeMillis = executionTimeMillis;
+        this.executionTimeNanos = executionTimeNanos;
         this.solutionStates = immutableCopy(solutionStates);
         this.solutionMoves = immutableCopy(solutionMoves);
         this.exploredStates = immutableCopy(exploredStates);
@@ -48,7 +48,28 @@ public final class SearchResult {
                 moveString,
                 totalCost,
                 iterations,
-                executionTimeMillis,
+                executionTimeMillis * 1_000_000L,
+                solutionStates,
+                solutionMoves,
+                exploredStates
+        );
+    }
+
+    public static SearchResult foundWithNanos(
+            String moveString,
+            int totalCost,
+            int iterations,
+            long executionTimeNanos,
+            List<State> solutionStates,
+            List<Direction> solutionMoves,
+            List<State> exploredStates
+    ) {
+        return new SearchResult(
+                true,
+                moveString,
+                totalCost,
+                iterations,
+                executionTimeNanos,
                 solutionStates,
                 solutionMoves,
                 exploredStates
@@ -61,7 +82,20 @@ public final class SearchResult {
                 "",
                 -1,
                 iterations,
-                executionTimeMillis,
+                executionTimeMillis * 1_000_000L,
+                Collections.<State>emptyList(),
+                Collections.<Direction>emptyList(),
+                exploredStates
+        );
+    }
+
+    public static SearchResult notFoundWithNanos(int iterations, long executionTimeNanos, List<State> exploredStates) {
+        return new SearchResult(
+                false,
+                "",
+                -1,
+                iterations,
+                executionTimeNanos,
                 Collections.<State>emptyList(),
                 Collections.<Direction>emptyList(),
                 exploredStates
@@ -89,7 +123,11 @@ public final class SearchResult {
     }
 
     public long getExecutionTimeMillis() {
-        return executionTimeMillis;
+        return executionTimeNanos / 1_000_000L;
+    }
+
+    public double getExecutionTimeMillisDecimal() {
+        return executionTimeNanos / 1_000_000.0;
     }
 
     public List<State> getSolutionStates() {

@@ -44,7 +44,7 @@ public final class SolutionSaver {
             writer.newLine();
             writer.write("Iterations: " + result.getIterations());
             writer.newLine();
-            writer.write("Execution time: " + result.getExecutionTimeMillis() + " ms");
+            writer.write("Execution time: " + formatMillis(result) + " ms");
             writer.newLine();
 
             writer.newLine();
@@ -116,5 +116,9 @@ public final class SolutionSaver {
         }
         grid[actor.getRow()][actor.getCol()] = 'Z';
         return grid;
+    }
+
+    private static String formatMillis(SearchResult result) {
+        return String.format(java.util.Locale.US, "%.3f", result.getExecutionTimeMillisDecimal());
     }
 }

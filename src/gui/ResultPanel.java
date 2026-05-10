@@ -139,7 +139,7 @@ public class ResultPanel extends JPanel {
         }
         builder.append("Iterations: ").append(result.getIterations()).append(System.lineSeparator());
         builder.append("Explored states: ").append(result.getExploredStates().size()).append(System.lineSeparator());
-        builder.append("Execution time: ").append(result.getExecutionTimeMillis()).append(" ms");
+        builder.append("Execution time: ").append(formatMillis(result)).append(" ms");
 
         summaryArea.setText(builder.toString());
         summaryArea.setCaretPosition(0);
@@ -192,5 +192,9 @@ public class ResultPanel extends JPanel {
         playPauseButton.setEnabled(enabled);
         speedCombo.setEnabled(enabled);
         playbackModeCombo.setEnabled(enabled && playbackModeCombo.getItemCount() > 0);
+    }
+
+    private static String formatMillis(SearchResult result) {
+        return String.format(java.util.Locale.US, "%.3f", result.getExecutionTimeMillisDecimal());
     }
 }
