@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public final class Solver {
-    private Solver() {
+    private Solver() { // Utility class
     }
 
     public static SearchResult solve(Board board, SearchAlgorithm algorithm, HeuristicType heuristicType) {
@@ -27,7 +27,8 @@ public final class Solver {
         Node startNode = new Node(
                 startState,
                 0,
-                Heuristics.estimate(board, startState, selectedHeuristic),
+                Heuristics.estimate(board, startState, selectedHeuristic), // Tidak akan menghitung heuristic kalau
+                                                                           // selectedHeuristic adalah tipe NONE
                 null,
                 null,
                 0);
@@ -61,7 +62,9 @@ public final class Solver {
             List<MoveResult> neighbors = Movement.generateNeighbors(board, current.state);
             for (MoveResult move : neighbors) {
                 State nextState = move.getResultingState();
-                int nextCost = current.costFromStart + move.getMovementCost();
+                int nextCost = current.costFromStart + move.getMovementCost(); // Tetap dihitung di GBFS walaupun GBFS
+                                                                               // tidak pakai g(n) sbg prioritas karena
+                                                                               // sederhana, tidak spt heuristik
                 Integer previousBest = bestCostByState.get(nextState);
                 if (previousBest != null && nextCost >= previousBest) { // Kalau sudah pernah ke state tsb dengan cost
                                                                         // lebih rendah, skip aja
@@ -69,7 +72,10 @@ public final class Solver {
                 }
 
                 bestCostByState.put(nextState, nextCost);
-                int heuristic = Heuristics.estimate(board, nextState, selectedHeuristic); // Estimasi heuristic, h(n)
+                int heuristic = Heuristics.estimate(board, nextState, selectedHeuristic); // Estimasi heuristic, h(n),
+                                                                                          // tidak akan menambah time
+                                                                                          // complexity kalau
+                                                                                          // selectedHeuristic tipe NONE
                 frontier.add(new Node(
                         nextState,
                         nextCost,
@@ -122,7 +128,7 @@ public final class Solver {
         if (algorithm == SearchAlgorithm.GBFS) {
             return node.heuristicCost;
         }
-        return node.costFromStart + node.heuristicCost;
+        return node.costFromStart + node.heuristicCost; // Else A*
     }
 
     private static SearchResult buildFoundResult(

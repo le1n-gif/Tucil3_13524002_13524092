@@ -1,7 +1,7 @@
 package core;
 
 public final class Heuristics {
-    private Heuristics() {
+    private Heuristics() { // Utility class
     }
 
     public static int estimate(Board board, State state, HeuristicType heuristicType) {

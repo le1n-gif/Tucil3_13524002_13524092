@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Movement {
-    private Movement() {
+    private Movement() { // Utility class
     }
 
     public static List<MoveResult> generateNeighbors(Board board, State state) {
